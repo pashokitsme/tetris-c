@@ -66,8 +66,5 @@ void draw(char **buf) {
     for (size_t j = 0; j < FIELD_WIDTH; j++)
       putchar(buf[i][j]);
     putchar('\n');
-    free((void *)buf[i]);
   }
-
-  free((void *)buf);
 }
