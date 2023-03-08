@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEBUG
+#define DEBUG 0
 
 #define HELLO_WORLD "Hello, World"
 

@@ -7,7 +7,18 @@
 
 int main() {
   GameState state = init();
-  tick(&state);
+  bool run = true;
+  while (run) {
+
+#if DEBUG
+    printf("\ninfo > frame #%zu\n\n", state.tick);
+#endif
+    
+    clear_frame(state.buf);
+    tick(&state);
+    draw(state.buf);
+  }
+  
   return 0;
 }
 

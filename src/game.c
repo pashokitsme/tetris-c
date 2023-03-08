@@ -18,7 +18,9 @@ GameState init() {
 }
 
 void tick(GameState *state) {
-#ifdef DEBUG
-  printf("info > tick called");
+#if DEBUG
+  printf("info > tick called\n");
 #endif
+
+  state->tick++;
 }

@@ -7,7 +7,7 @@
 #include "global.h"
 
 char **alloc_new_frame() {
-#ifdef DEBUG
+#if DEBUG
   printf("info > alloc_frame_buf frame_info: ");
   printf("h: %d w: %d\n", FIELD_HEIGHT, FIELD_WIDTH);
 #endif
@@ -23,7 +23,7 @@ char **alloc_new_frame() {
 }
 
 void init_frame(char **buf) {
-#ifdef DEBUG
+#if DEBUG
   printf("info > init_frame called\n");
 #endif
 
@@ -46,19 +46,19 @@ void init_frame(char **buf) {
 }
 
 void clear_frame(char **buf) {
-#ifdef DEBUG
+#if DEBUG
   printf("info > clear_frame called\n");
 #endif
 
-  for (size_t i = 1; i < FIELD_HEIGHT; i++)
-    for (size_t j = 1; j < FIELD_WIDTH; j++)
+  for (size_t i = 1; i < FIELD_HEIGHT - 1; i++)
+    for (size_t j = 1; j < FIELD_WIDTH - 1; j++)
       buf[i][j] = ' ';
 }
 
 void draw(char **buf) {
   NOT_NULL(buf);
 
-#ifdef DEBUG
+#if DEBUG
   printf("info > draw called\n");
 #endif
 
