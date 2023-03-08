@@ -6,5 +6,7 @@
 
 ```bash
   > git clone https://github.com/pashokitsme/tetris-c
+  > cd tetris-c
+  > mkdir dist
   > ./build.bat
 ```
