@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DEBUG
+
 #define HELLO_WORLD "Hello, World"
 
 #define NOT_NULL(var)                                                          \

@@ -1,12 +1,17 @@
-#define DEBUG
-
 #include <stdio.h>
+#include <stdbool.h>
 
-#include "field.h"
 #include "global.h"
+#include "field.h"
 
 int main() {
-  char **buf = new_frame();
-    
+  char **buf = alloc_new_frame();
+  init_frame(buf);
+  while (true) {
+    clear_frame(buf);
+    draw(buf);
+    break;
+  }
+  
   return 0;
 }
