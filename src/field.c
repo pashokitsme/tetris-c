@@ -35,7 +35,6 @@ void init_frame(char **buf) {
   for (size_t i = 1; i < FIELD_HEIGHT - 1; i++) {
     buf[i][0] = '|';
     buf[i][FIELD_WIDTH - 1] = '|';
-    printf("i: %zu\n", i);
   }
 
   buf[0][0] = '+';
@@ -43,11 +42,7 @@ void init_frame(char **buf) {
   buf[FIELD_HEIGHT - 1][0] = '+';
   buf[FIELD_HEIGHT - 1][FIELD_WIDTH - 1] = '+';
 
-  for (size_t i = 1; i < FIELD_HEIGHT - 1; i++) {
-    for (size_t j = 1; j < FIELD_WIDTH - 1; j++) {
-      buf[i][j] = ' ';
-    }
-  }
+  clear_frame(buf);
 }
 
 void clear_frame(char **buf) {
