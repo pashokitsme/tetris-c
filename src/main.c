@@ -17,12 +17,12 @@ int main() {
   while (run) {
 
 #if DEBUG
-    printf("\ninfo > frame #%zu\n\n", state.tick);
+    printf("\ninfo > frame %zu\n\n", state.tick);
 #endif
 
-    clear_frame(state.buf);
+    clear_buf(state.buf, FIELD_HEIGHT, FIELD_WIDTH);
     tick(&state);
-    draw(state.buf);
+    draw_game_frame(state.buf);
 
 #if defined(_WIN32) || defined(_WIN64)
     Sleep(1000);

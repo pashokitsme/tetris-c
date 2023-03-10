@@ -6,27 +6,20 @@
 #include "field.h"
 #include "global.h"
 
-char **alloc_new_frame() {
-#if DEBUG
-  printf("info > alloc_frame_buf frame_info: ");
-  printf("h: %d w: %d\n", FIELD_HEIGHT, FIELD_WIDTH);
-#endif
-
-  char **buf = (char **)malloc(sizeof(char *) * FIELD_HEIGHT);
+char **alloc_new_buffer(size_t heigth, size_t width) {
+  char **buf = (char **)malloc(sizeof(char *) * heigth);
   NOT_NULL(buf);
-  for (size_t i = 0; i < FIELD_HEIGHT; i++) {
-    buf[i] = (char *)malloc(sizeof(char) * FIELD_WIDTH);
+  for (size_t i = 0; i < heigth; i++) {
+    buf[i] = (char *)malloc(sizeof(char) * width);
     NOT_NULL(buf[i]);
   }
 
   return buf;
 }
 
-void init_frame(char **buf) {
-#if DEBUG
-  printf("info > init_frame called\n");
-#endif
-
+char **init_frame() {
+  char **buf = alloc_new_buffer(FIELD_HEIGHT, FIELD_WIDTH);
+  
   for (size_t i = 1; i < FIELD_WIDTH - 1; i++) {
     buf[0][i] = '-';
     buf[FIELD_HEIGHT - 1][i] = '-';
@@ -42,25 +35,27 @@ void init_frame(char **buf) {
   buf[FIELD_HEIGHT - 1][0] = '+';
   buf[FIELD_HEIGHT - 1][FIELD_WIDTH - 1] = '+';
 
-  clear_frame(buf);
+  clear_buf(buf, FIELD_HEIGHT - 1, FIELD_WIDTH - 1);
+  return buf;
 }
 
-void clear_frame(char **buf) {
-#if DEBUG
-  printf("info > clear_frame called\n");
-#endif
-
-  for (size_t i = 1; i < FIELD_HEIGHT - 1; i++)
-    for (size_t j = 1; j < FIELD_WIDTH - 1; j++)
+void clear_buf(char **buf, size_t heigth, size_t width) {
+  NOT_NULL(buf);
+  
+  for (size_t i = 1; i < heigth; i++)
+    for (size_t j = 1; j < width; j++)
       buf[i][j] = ' ';
 }
 
-void draw(char **buf) {
-  NOT_NULL(buf);
+void free_buf(char **buf, size_t heigth) {
+  for (size_t i = 0; i < heigth; i++)
+    free(buf[i]);
 
-#if DEBUG
-  printf("info > draw called\n");
-#endif
+  free(buf);
+}
+
+void draw_game_frame(char **buf) {
+  NOT_NULL(buf);
 
   for (size_t i = 0; i < FIELD_HEIGHT; i++) {
     for (size_t j = 0; j < FIELD_WIDTH; j++)
