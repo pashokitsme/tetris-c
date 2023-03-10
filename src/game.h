@@ -31,8 +31,8 @@ typedef enum { L, Z, T, I, O } ShapeDef;
 
 typedef struct {
   ShapeDef kind;
-  size_t posX;
-  size_t posY;
+  size_t x;
+  size_t y;
   char shape[2][3];
 } Shape;
 

@@ -33,13 +33,3 @@ int main() {
 
   return 0;
 }
-
-/*
-  char **buf = alloc_new_frame();
-  init_frame(buf);
-  while (true) {
-    clear_frame(buf);
-    draw(buf);
-    break;
-  }
-*/

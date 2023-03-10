@@ -1,25 +1,33 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "field.h"
 #include "game.h"
 
-
 Shape random_shape() {
   Shape shape;
   shape.kind = (ShapeDef)rand() % 4;
-  char buf[2][3] = {' '};
+  shape.x = 0;
+  shape.y = 0;
   switch (shape.kind) {
   case L:
+    memcpy(shape.shape, Shape_L, sizeof(char) * 2 * 3);
     break;
   case Z:
+    memcpy(shape.shape, Shape_Z, sizeof(char) * 2 * 3);
+    break;
   case T:
+    memcpy(shape.shape, Shape_T, sizeof(char) * 2 * 3);
+    break;
   case I:
+    memcpy(shape.shape, Shape_I, sizeof(char) * 2 * 3);
+    break;
   case O:
+    memcpy(shape.shape, Shape_O, sizeof(char) * 2 * 3);
     break;
   }
 
-  shape.shape = buf;
   return shape;
 }
 
