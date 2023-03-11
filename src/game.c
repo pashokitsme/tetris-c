@@ -54,7 +54,7 @@ bool is_line_fully(GameState *state, size_t height) {
 bool is_down_empty(GameState *state, size_t height, size_t width) {
   ASSERT_RETURN(HEIGHT_CHECK(height), false);
   ASSERT_RETURN(WIDTH_CHECK(width), false);
-  TODO("is_down_empty");
+  return state->buf[height + 1][width] == ' ';
 }
 
 bool is_line_empty(GameState *state, size_t heigth) {
@@ -66,7 +66,22 @@ bool is_line_empty(GameState *state, size_t heigth) {
   return true;
 }
 
-void move_all_down(GameState *state) { TODO("move_all_down"); }
+bool move_all_down(GameState *state) {
+  bool moved = false;
+  for (size_t i = 0; i < FIELD_HEIGHT - 2; i++) {
+    for (size_t j = 0; j < FIELD_WIDTH - 1; j++) {
+      if (state->buf[i][j] != 'O' || !is_down_empty(state, i, j))
+        continue;
+      if (!moved)
+        moved = true;
+
+      state->buf[i + 1][j] = state->buf[i][j];
+      state->buf[i][j] = ' ';
+    }
+  }
+
+  return moved;
+}
 
 void clear_line(GameState *state, size_t height) {
   ASSERT(HEIGHT_CHECK(height));
@@ -78,6 +93,10 @@ void tick(GameState *state) {
 #if DEBUG
   printf("info > tick called\n");
 #endif
+
+  if (move_all_down(state)) {
+    TODO("tick")
+  }
 
   state->tick++;
 }

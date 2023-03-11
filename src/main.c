@@ -1,3 +1,4 @@
+#include <conio.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -8,13 +9,15 @@
 int main() {
   GameState state = init();
   bool run = true;
+  char control;
   while (run) {
-
+    control = _getch();
+    if (control == 'q')
+      break;
 #if DEBUG
     printf("\ninfo > frame %zu\n\n", state.tick);
 #endif
 
-    clear_buf(state.buf, FIELD_HEIGHT, FIELD_WIDTH);
     tick(&state);
     draw_game_frame(state.buf);
   }
