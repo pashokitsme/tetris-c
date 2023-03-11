@@ -1,3 +1,4 @@
+#include <conio.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -59,7 +60,7 @@ void draw_game_frame(char **buf) {
 
   for (size_t i = 0; i < FIELD_HEIGHT; i++) {
     for (size_t j = 0; j < FIELD_WIDTH; j++)
-      putchar(buf[i][j]);
-    putchar('\n');
+      _putch(buf[i][j]);
+    _putch('\n');
   }
 }

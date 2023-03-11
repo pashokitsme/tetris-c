@@ -41,8 +41,10 @@ typedef struct {
   long long tick;
   int score;
   Shape shape;
+  bool run;
 } GameState;
 
 GameState init();
 Shape random_shape();
+void move_shape(GameState *state, char control);
 void tick(GameState *state);

@@ -5,6 +5,10 @@
 #include "field.h"
 #include "game.h"
 
+bool is_down_empty(GameState *state, size_t height, size_t width);
+bool is_line_empty(GameState *state, size_t heigth);
+void clear_line(GameState *state, size_t height);
+
 Shape random_shape() {
   Shape shape;
   shape.kind = (ShapeDef)rand() % 4;
@@ -78,6 +82,11 @@ bool move_all_down(GameState *state) {
       state->buf[i + 1][j] = state->buf[i][j];
       state->buf[i][j] = ' ';
     }
+
+    if (is_line_fully(state, i)) {
+      clear_line(state, i);
+      i--;
+    }
   }
 
   return moved;
@@ -89,13 +98,46 @@ void clear_line(GameState *state, size_t height) {
     state->buf[height][i] = ' ';
 }
 
+void _move_shape(GameState *state, size_t y_offset) {
+  TODO("_move_shape");
+  if (y_offset > 0) {
+    if (state->buf[state->shape.x][state->shape.y + 3] != ' ')
+      return;
+
+    if (state->buf[state->shape.x + 1][state->shape.y + 3] != ' ')
+      return;
+  }
+}
+
+void move_shape(GameState *state, char control) {
+  switch (control) {
+  case 'a':
+    return _move_shape(state, 1);
+  case 'd':
+    return _move_shape(state, -1);
+  }
+}
+
+bool has_space_for_new_shape(GameState *state) {
+  return is_line_empty(state, 1) && is_line_empty(state, 2);
+}
+
+bool spawn_shape(GameState *state) {
+  if (!has_space_for_new_shape(state))
+    return false;
+
+  state->shape = random_shape();
+
+  return true;
+}
+
 void tick(GameState *state) {
 #if DEBUG
   printf("info > tick called\n");
 #endif
+  TODO("tick")
 
   if (move_all_down(state)) {
-    TODO("tick")
   }
 
   state->tick++;
