@@ -7,6 +7,19 @@
 
 #define HELLO_WORLD "Hello, World"
 
+#define ASSERT(condition)                                                      \
+  if (!(condition)) {                                                          \
+    fprintf(stderr, "error > assert failed: %s", #condition);                  \
+    return;                                                                    \
+  }
+
+#define ASSERT_RETURN(condition, return_value)                                 \
+  if (!(condition)) {                                                          \
+    fprintf(stderr, "error > assert failed: %s. returning %s", #condition,     \
+            #return_value);                                                    \
+    return return_value;                                                       \
+  }
+
 #define NOT_NULL(var)                                                          \
   if (!var) {                                                                  \
     fprintf(stderr, "error > check failed: var `%s` is null", #var);           \
