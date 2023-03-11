@@ -3,28 +3,28 @@
 #include "global.h"
 
 static const char Shape_L[2][3] = {
-  { 'O', ' ', ' ' },
-  { 'O', 'O', 'O' }
+  { 'X', ' ', ' ' },
+  { 'X', 'X', 'X' }
 };
 
 static const char Shape_Z[2][3] = {
-  { 'O', 'O', ' ' },
-  { ' ', 'O', 'O' }
+  { 'X', 'X', ' ' },
+  { ' ', 'X', 'X' }
 };
 
 static const char Shape_I[2][3] = {
-  { 'O', 'O', 'O' },
+  { 'X', 'X', 'X' },
   { ' ' }
 };
 
 static const char Shape_T[2][3] = {
-  { ' ', 'O', ' ' },
-  { 'O' }
+  { ' ', 'X', ' ' },
+  { 'X' }
 };
 
 static const char Shape_O[2][3] = {
-  { 'O', 'O', ' ' },
-  { 'O', 'O', ' ' }
+  { 'X', 'X', ' ' },
+  { 'X', 'X', ' ' }
 };
 
 typedef enum { L, Z, T, I, O } ShapeDef;
@@ -45,6 +45,7 @@ typedef struct {
 } GameState;
 
 GameState init();
+void draw(GameState *state);
 Shape random_shape();
 void move_shape(GameState *state, char control);
 void tick(GameState *state);

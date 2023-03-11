@@ -54,13 +54,3 @@ void free_buf(char **buf, size_t heigth) {
 
   free(buf);
 }
-
-void draw_game_frame(char **buf) {
-  NOT_NULL(buf);
-
-  for (size_t i = 0; i < FIELD_HEIGHT; i++) {
-    for (size_t j = 0; j < FIELD_WIDTH; j++)
-      _putch(buf[i][j]);
-    _putch('\n');
-  }
-}

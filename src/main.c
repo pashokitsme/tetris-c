@@ -7,19 +7,23 @@
 #include "global.h"
 
 int main() {
-  GameState state = init();
-  bool run = true;
+  GameState state_ = init();
+  GameState *state = &state_;
   char control;
-  while (run) {
+  printf("controls:\n\ta - move shape left\n\td - move shape right\n\tq - "
+         "exit\n\tany key - next tick\n");
+  loop {
+#if DEBUG
+    printf("info > tick: %zu\n", state->tick);
+    printf("info > shape kind: %d\n", state->shape.kind);
+#endif
+
+    tick(state);
+    draw(state);
+
     control = _getch();
     if (control == 'q')
       break;
-#if DEBUG
-    printf("\ninfo > frame %zu\n\n", state.tick);
-#endif
-
-    tick(&state);
-    draw_game_frame(state.buf);
   }
 
   return 0;

@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEBUG 0
+#define DEBUG 1
 #define ASSERTATIONS 1
 
-#define HELLO_WORLD "Hello, World"
+#define loop while(1)
 
 #if ASSERTATIONS
 #define ASSERT(condition)                                                      \

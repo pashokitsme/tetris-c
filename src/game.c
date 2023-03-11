@@ -1,3 +1,4 @@
+#include <conio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,8 +13,8 @@ void clear_line(GameState *state, size_t height);
 Shape random_shape() {
   Shape shape;
   shape.kind = (ShapeDef)rand() % 4;
-  shape.x = 0;
-  shape.y = 0;
+  shape.x = FIELD_WIDTH / 2;
+  shape.y = 1;
   switch (shape.kind) {
   case L:
     memcpy(shape.shape, Shape_L, sizeof(char) * 2 * 3);
@@ -41,6 +42,7 @@ GameState init() {
   state.shape = random_shape();
   state.tick = 0;
   state.score = 0;
+  state.run = true;
   return state;
 }
 
@@ -72,8 +74,8 @@ bool is_line_empty(GameState *state, size_t heigth) {
 
 bool move_all_down(GameState *state) {
   bool moved = false;
-  for (size_t i = 0; i < FIELD_HEIGHT - 2; i++) {
-    for (size_t j = 0; j < FIELD_WIDTH - 1; j++) {
+  for (size_t i = 1; i < FIELD_HEIGHT - 2; i++) {
+    for (size_t j = 1; j < FIELD_WIDTH - 1; j++) {
       if (state->buf[i][j] != 'O' || !is_down_empty(state, i, j))
         continue;
       if (!moved)
@@ -98,23 +100,19 @@ void clear_line(GameState *state, size_t height) {
     state->buf[height][i] = ' ';
 }
 
-void _move_shape(GameState *state, size_t y_offset) {
-  TODO("_move_shape");
-  if (y_offset > 0) {
-    if (state->buf[state->shape.x][state->shape.y + 3] != ' ')
-      return;
-
-    if (state->buf[state->shape.x + 1][state->shape.y + 3] != ' ')
-      return;
-  }
-}
-
 void move_shape(GameState *state, char control) {
+  TODO("move_shape")
   switch (control) {
   case 'a':
-    return _move_shape(state, 1);
+    if (state->buf[state->shape.y][state->shape.x + 3] != ' ')
+      return;
+
+    if (state->buf[state->shape.y + 1][state->shape.x + 3] != ' ')
+      return;
+
+    break;
   case 'd':
-    return _move_shape(state, -1);
+    break;
   }
 }
 
@@ -131,14 +129,34 @@ bool spawn_shape(GameState *state) {
   return true;
 }
 
+void freeze_shape(GameState *state) {
+  for (size_t i = 0; i < 2; i++) {
+    for (size_t j = 0; j < 3; j++) {
+      if (state->shape.shape[i][j] == 'X')
+        state->buf[state->shape.y + i][state->shape.x + j] = 'O';
+    }
+  }
+}
+
 void tick(GameState *state) {
 #if DEBUG
   printf("info > tick called\n");
 #endif
-  TODO("tick")
 
   if (move_all_down(state)) {
   }
 
   state->tick++;
+}
+
+void draw(GameState *state) {
+  for (size_t i = 0; i < FIELD_HEIGHT; i++) {
+    for (size_t j = 0; j < FIELD_WIDTH; j++) {
+      (state->shape.y >= i && state->shape.y < i + 2) &&
+              (state->shape.x >= j && state->shape.x < j + 3)
+          ? _putch(state->shape.shape[i - state->shape.y][j - state->shape.x])
+          : _putch(state->buf[i][j]);
+    }
+    _putch('\n');
+  }
 }
