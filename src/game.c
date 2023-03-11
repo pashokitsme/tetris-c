@@ -70,7 +70,6 @@ void move_all_down(GameState *state) { TODO("move_all_down"); }
 
 void clear_line(GameState *state, size_t height) {
   ASSERT(HEIGHT_CHECK(height));
-
   for (size_t i = 1; i < FIELD_WIDTH - 1; i++)
     state->buf[height][i] = ' ';
 }

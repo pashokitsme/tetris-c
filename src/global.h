@@ -4,9 +4,11 @@
 #include <stdlib.h>
 
 #define DEBUG 0
+#define ASSERTATIONS 1
 
 #define HELLO_WORLD "Hello, World"
 
+#if ASSERTATIONS
 #define ASSERT(condition)                                                      \
   if (!(condition)) {                                                          \
     fprintf(stderr, "error > assert failed: %s", #condition);                  \
@@ -19,6 +21,10 @@
             #return_value);                                                    \
     return return_value;                                                       \
   }
+#else
+#define ASSERT(condition) ;
+#define ASSERT_RETURN(condition, return_value) ;
+#endif
 
 #define NOT_NULL(var)                                                          \
   if (!var) {                                                                  \
