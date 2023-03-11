@@ -19,7 +19,7 @@ char **alloc_new_buffer(size_t heigth, size_t width) {
 
 char **init_frame() {
   char **buf = alloc_new_buffer(FIELD_HEIGHT, FIELD_WIDTH);
-  
+
   for (size_t i = 1; i < FIELD_WIDTH - 1; i++) {
     buf[0][i] = '-';
     buf[FIELD_HEIGHT - 1][i] = '-';
@@ -41,7 +41,7 @@ char **init_frame() {
 
 void clear_buf(char **buf, size_t heigth, size_t width) {
   NOT_NULL(buf);
-  
+
   for (size_t i = 1; i < heigth; i++)
     for (size_t j = 1; j < width; j++)
       buf[i][j] = ' ';

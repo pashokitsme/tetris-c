@@ -41,7 +41,6 @@ typedef struct {
   long long tick;
   int score;
   Shape shape;
-  char **junk;
 } GameState;
 
 GameState init();

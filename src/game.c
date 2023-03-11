@@ -40,13 +40,17 @@ GameState init() {
   return state;
 }
 
-bool is_line_completed(GameState *state, size_t height) {
+bool is_line_fully(GameState *state, size_t height) {
   for (size_t i = 1; i < FIELD_WIDTH - 1; i++) {
     if (state->buf[height][i] == ' ')
       return false;
   }
 
   return true;
+}
+
+bool is_down_empty(GameState *state, size_t heigth, size_t width) {
+  TODO("is_down_empty");
 }
 
 bool is_line_empty(GameState *state, size_t heigth) {
