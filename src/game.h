@@ -14,17 +14,22 @@ static const char Shape_Z[2][3] = {
 
 static const char Shape_I[2][3] = {
   { 'X', 'X', 'X' },
-  { ' ' }
+  { ' ', ' ', ' ' }
 };
 
 static const char Shape_T[2][3] = {
   { ' ', 'X', ' ' },
-  { 'X' }
+  { 'X', 'X', 'X' }
 };
 
 static const char Shape_O[2][3] = {
   { 'X', 'X', ' ' },
   { 'X', 'X', ' ' }
+};
+
+static const char Shape_Empty[2][3] = {
+  { ' ', ' ', ' '},
+  { ' ', ' ', ' '}
 };
 
 typedef enum { L, Z, T, I, O } ShapeDef;
@@ -44,7 +49,7 @@ typedef struct {
   bool run;
 } GameState;
 
-GameState init();
+GameState game_state_init();
 void draw(GameState *state);
 Shape random_shape();
 void move_shape(GameState *state, char control);

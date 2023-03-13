@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "field.h"
 #include "game.h"
@@ -14,7 +15,7 @@ Shape random_shape() {
   Shape shape;
   shape.kind = (ShapeDef)rand() % 4;
   shape.x = FIELD_WIDTH / 2;
-  shape.y = 1;
+  shape.y = 3;
   switch (shape.kind) {
   case L:
     memcpy(shape.shape, Shape_L, sizeof(char) * 2 * 3);
@@ -36,7 +37,9 @@ Shape random_shape() {
   return shape;
 }
 
-GameState init() {
+GameState game_state_init() {
+  printf("info > random seed set to: %zu\n", RANDOM_SEED);
+  srand(RANDOM_SEED);
   GameState state;
   state.buf = init_frame();
   state.shape = random_shape();
@@ -149,13 +152,17 @@ void tick(GameState *state) {
   state->tick++;
 }
 
+// ↓
 void draw(GameState *state) {
+  size_t shape_x = state->shape.x;
+  size_t shape_y = state->shape.y;
+  size_t cur = 0;
+
   for (size_t i = 0; i < FIELD_HEIGHT; i++) {
     for (size_t j = 0; j < FIELD_WIDTH; j++) {
-      (state->shape.y >= i && state->shape.y < i + 2) &&
-              (state->shape.x >= j && state->shape.x < j + 3)
-          ? _putch(state->shape.shape[i - state->shape.y][j - state->shape.x])
-          : _putch(state->buf[i][j]);
+      ((shape_y >= i && shape_y < i + 2) && (shape_x >= j && shape_x < j + 3))
+          ? _putch(*(*state->shape.shape + cur++))
+          : _putch(*(*(state->buf + i) + j));
     }
     _putch('\n');
   }

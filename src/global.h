@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define RANDOM_SEED (time(NULL) ^ 5) % 691
+
 #define DEBUG 1
 #define ASSERTATIONS 1
 

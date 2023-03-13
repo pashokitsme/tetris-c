@@ -1,7 +1,7 @@
 #pragma once
 
 #define FIELD_HEIGHT 16
-#define FIELD_WIDTH 12
+#define FIELD_WIDTH 16
 
 #define HEIGHT_CHECK(value) value > 0 && value < FIELD_HEIGHT
 #define WIDTH_CHECK(value) value > 0 && value < FIELD_WIDTH
