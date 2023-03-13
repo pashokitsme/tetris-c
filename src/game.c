@@ -15,7 +15,7 @@ Shape random_shape() {
   Shape shape;
   shape.kind = (ShapeDef)rand() % 4;
   shape.x = FIELD_WIDTH / 2;
-  shape.y = 3;
+  shape.y = -1;
   switch (shape.kind) {
   case L:
     memcpy(shape.shape, Shape_L, sizeof(char) * 2 * 3);
@@ -119,19 +119,6 @@ void move_shape(GameState *state, char control) {
   }
 }
 
-bool has_space_for_new_shape(GameState *state) {
-  return is_line_empty(state, 1) && is_line_empty(state, 2);
-}
-
-bool spawn_shape(GameState *state) {
-  if (!has_space_for_new_shape(state))
-    return false;
-
-  state->shape = random_shape();
-
-  return true;
-}
-
 void freeze_shape(GameState *state) {
   for (size_t i = 0; i < 2; i++) {
     for (size_t j = 0; j < 3; j++) {
@@ -142,26 +129,22 @@ void freeze_shape(GameState *state) {
 }
 
 void tick(GameState *state) {
-#if DEBUG
-  printf("info > tick called\n");
-#endif
+  // if (move_all_down(state)) {
+  // }
 
-  if (move_all_down(state)) {
-  }
-
+  state->shape.y++;
   state->tick++;
 }
 
-// ↓
 void draw(GameState *state) {
+  char *shape_ptr = *state->shape.shape;
   size_t shape_x = state->shape.x;
   size_t shape_y = state->shape.y;
-  size_t cur = 0;
 
   for (size_t i = 0; i < FIELD_HEIGHT; i++) {
     for (size_t j = 0; j < FIELD_WIDTH; j++) {
       ((shape_y >= i && shape_y < i + 2) && (shape_x >= j && shape_x < j + 3))
-          ? _putch(*(*state->shape.shape + cur++))
+          ? _putch(*shape_ptr++)
           : _putch(*(*(state->buf + i) + j));
     }
     _putch('\n');
