@@ -10,7 +10,7 @@
 int main() {
   GameState state = game_state_init();
   GameState *state_ptr = &state;
-  char control;
+  char control = '\0';
 
   printf("controls:\n\ta - move shape left\n\td - move shape right\n\tq - "
          "exit\n\tany key - next tick\n");
@@ -21,7 +21,7 @@ int main() {
     printf("info > shape kind: %d\n", state.shape.kind);
 #endif
 
-    tick(state_ptr);
+    tick(state_ptr, control);
     draw(state_ptr);
 
     control = _getch();

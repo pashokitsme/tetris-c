@@ -14,8 +14,8 @@ void clear_line(GameState *state, size_t height);
 Shape random_shape() {
   Shape shape;
   shape.kind = (ShapeDef)rand() % 4;
-  shape.x = 3; // FIELD_WIDTH / 2;
-  shape.y = 1;
+  shape.x = 4; // FIELD_WIDTH / 2;
+  shape.y = 0;
   switch (shape.kind) {
   case L:
     memcpy(shape.shape, Shape_L, sizeof(char) * 2 * 3);
@@ -34,18 +34,14 @@ Shape random_shape() {
     break;
   }
 
-  for (size_t i = 0; i < 2; i++) {
-    for (size_t j = 0; j < 3; j++) {
-      _putch(shape.shape[i][j]);
-    }
-    _putch('\n');
-  }
-
   return shape;
 }
 
 GameState game_state_init() {
+#if DEBUG
   printf("info > random seed set to: %zu\n", RANDOM_SEED);
+#endif
+
   GameState state;
   state.buf = init_frame();
   state.shape = random_shape();
@@ -109,24 +105,42 @@ void clear_line(GameState *state, size_t height) {
     state->buf[height][i] = ' ';
 }
 
-void move_shape(GameState *state, char control) {
-  TODO("move_shape")
+bool move_shape(GameState *state, char control) {
+  if (state->shape.x == 2 || state->shape.x == FIELD_WIDTH - 3)
+    return false;
+
   switch (control) {
-  case 'a':
-    if (state->buf[state->shape.y][state->shape.x + 3] != ' ')
-      return;
-
-    if (state->buf[state->shape.y + 1][state->shape.x + 3] != ' ')
-      return;
-
-    break;
   case 'd':
+    for (size_t i = 0; i < 2; i++) {
+      for (size_t j = 0; j < 3; j++) {
+        size_t y = state->shape.y + i;
+        size_t x = state->shape.x + j;
+        if (state->shape.shape[i][j] == 'X' && state->buf[y][x + 1] != ' ')
+          return false;
+      }
+    }
+    state->shape.x++;
     break;
+  case 'a':
+    for (size_t i = 0; i < 2; i++) {
+      for (size_t j = 0; j < 3; j++) {
+        size_t y = state->shape.y + i;
+        size_t x = state->shape.x + j;
+        if (state->shape.shape[i][j] == 'X' && state->buf[y][x - 1] != ' ')
+          return false;
+      }
+    }
+    state->shape.x--;
+    break;
+  default:
+    return false;
   }
+
+  return true;
 }
 
 bool can_move_down(GameState *state) {
-  if (state->shape.y <= 1)
+  if (state->shape.y < 1)
     return true;
 
   if (state->shape.y + 2 == FIELD_HEIGHT)
@@ -137,7 +151,7 @@ bool can_move_down(GameState *state) {
       if (state->shape.shape[y][x] != 'X')
         continue;
 
-      if (state->buf[state->shape.y + y][state->shape.x + x] == 'O')
+      if (state->buf[state->shape.y + y][state->shape.x + x] != ' ')
         return false;
     }
   }
@@ -145,7 +159,7 @@ bool can_move_down(GameState *state) {
   return true;
 }
 
-void freeze_shape(GameState *state) {
+void commit(GameState *state) {
   for (size_t i = 0; i < 2; i++) {
     for (size_t j = 0; j < 3; j++) {
       if (state->shape.shape[i][j] == 'X')
@@ -154,13 +168,18 @@ void freeze_shape(GameState *state) {
   }
 }
 
-void tick(GameState *state) {
+void tick(GameState *state, char input) {
   state->tick++;
 
+  if (move_shape(state, input))
+    return;
+
   if (!can_move_down(state)) {
-    freeze_shape(state);
+    commit(state);
     state->shape = random_shape();
-    printf("new shape: %d\n", state->shape.kind);
+#if DEBUG
+    printf("info > new shape: %d\n", state->shape.kind);
+#endif
     return;
   }
 

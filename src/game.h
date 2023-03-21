@@ -52,5 +52,5 @@ typedef struct {
 GameState game_state_init();
 void draw(GameState *state);
 Shape random_shape();
-void move_shape(GameState *state, char control);
-void tick(GameState *state);
+bool move_shape(GameState *state, char control);
+void tick(GameState *state, char input);
