@@ -21,3 +21,4 @@ jobs:
         automatic_release_tag: latest
         title: Latest release
         files: ./dist/tetris-c.exe
+        prerelease: false
