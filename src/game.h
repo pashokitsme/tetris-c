@@ -13,8 +13,8 @@ static const char Shape_Z[2][3] = {
 };
 
 static const char Shape_I[2][3] = {
-  { 'X', 'X', 'X' },
-  { ' ', ' ', ' ' }
+  { ' ', ' ', ' ' },
+  { 'X', 'X', 'X' }
 };
 
 static const char Shape_T[2][3] = {

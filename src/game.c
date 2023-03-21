@@ -14,8 +14,8 @@ void clear_line(GameState *state, size_t height);
 Shape random_shape() {
   Shape shape;
   shape.kind = (ShapeDef)rand() % 4;
-  shape.x = FIELD_WIDTH / 2;
-  shape.y = -1;
+  shape.x = 3; // FIELD_WIDTH / 2;
+  shape.y = 1;
   switch (shape.kind) {
   case L:
     memcpy(shape.shape, Shape_L, sizeof(char) * 2 * 3);
@@ -34,12 +34,18 @@ Shape random_shape() {
     break;
   }
 
+  for (size_t i = 0; i < 2; i++) {
+    for (size_t j = 0; j < 3; j++) {
+      _putch(shape.shape[i][j]);
+    }
+    _putch('\n');
+  }
+
   return shape;
 }
 
 GameState game_state_init() {
   printf("info > random seed set to: %zu\n", RANDOM_SEED);
-  srand(RANDOM_SEED);
   GameState state;
   state.buf = init_frame();
   state.shape = random_shape();
@@ -119,21 +125,46 @@ void move_shape(GameState *state, char control) {
   }
 }
 
+bool can_move_down(GameState *state) {
+  if (state->shape.y <= 1)
+    return true;
+
+  if (state->shape.y + 2 == FIELD_HEIGHT)
+    return false;
+
+  for (size_t y = 0; y < 2; y++) {
+    for (size_t x = 0; x < 3; x++) {
+      if (state->shape.shape[y][x] != 'X')
+        continue;
+
+      if (state->buf[state->shape.y + y][state->shape.x + x] == 'O')
+        return false;
+    }
+  }
+
+  return true;
+}
+
 void freeze_shape(GameState *state) {
   for (size_t i = 0; i < 2; i++) {
     for (size_t j = 0; j < 3; j++) {
       if (state->shape.shape[i][j] == 'X')
-        state->buf[state->shape.y + i][state->shape.x + j] = 'O';
+        state->buf[state->shape.y + i - 1][state->shape.x + j] = 'O';
     }
   }
 }
 
 void tick(GameState *state) {
-  // if (move_all_down(state)) {
-  // }
+  state->tick++;
+
+  if (!can_move_down(state)) {
+    freeze_shape(state);
+    state->shape = random_shape();
+    printf("new shape: %d\n", state->shape.kind);
+    return;
+  }
 
   state->shape.y++;
-  state->tick++;
 }
 
 void draw(GameState *state) {
@@ -143,9 +174,16 @@ void draw(GameState *state) {
 
   for (size_t i = 0; i < FIELD_HEIGHT; i++) {
     for (size_t j = 0; j < FIELD_WIDTH; j++) {
-      ((shape_y >= i && shape_y < i + 2) && (shape_x >= j && shape_x < j + 3))
-          ? _putch(*shape_ptr++)
-          : _putch(*(*(state->buf + i) + j));
+      NOT_NULL(shape_ptr);
+      if ((shape_y >= i + 1 && shape_y < i + 3) &&
+          (shape_x >= j - 2 && shape_x < j + 1)) {
+        if (*shape_ptr == 'X') {
+          _putch(*shape_ptr++);
+          continue;
+        }
+        shape_ptr++;
+      }
+      _putch(*(*(state->buf + i) + j));
     }
     _putch('\n');
   }
